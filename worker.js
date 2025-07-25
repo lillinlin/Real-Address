@@ -35,7 +35,7 @@ async function handleRequest(request) {
     gender = user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
     phone = getRandomPhoneNumber(country)
   } else {
-    name = getRandomName()
+    name = "Random Name" // Fallback name
     gender = "Unknown"
     phone = getRandomPhoneNumber(country)
   }
@@ -193,9 +193,8 @@ const html = `
     </table>
     </div>
   <div class="footer">
-  Original version by chatgpt.org.uk, modified by Adonis142857 ｜ <a href="https://github.com/Adonis142857/Real-Address-Generator" target="_blank"><img src="https://pic.imgdb.cn/item/66e7ab36d9c307b7e9cefd24.png" alt="GitHub" style="width: 20px; height: 20px; vertical-align: middle; position: relative; top: -3px;"></a>
-</div>
-
+    <a href="https://github.com/lillinlin/Real-Address" target="_blank">GitHub</a>
+  </div>
 
   <script>
     function copyToClipboard(text) {
@@ -225,7 +224,6 @@ const html = `
       renderSavedAddresses();
     }
     
-
     // 渲染保存的地址
     function renderSavedAddresses() {
       const savedAddresses = JSON.parse(localStorage.getItem('savedAddresses') || '[]');
@@ -267,19 +265,16 @@ const html = `
 </body>
 </html>
 `
-
-
-
   return new Response(html, {
     headers: { 'content-type': 'text/html;charset=UTF-8' },
   })
 }
 
 function getRandomLocationInCountry(country) {
-  // 只保留澳大利亚和新增的瑞士坐标
+  // 优化城市列表
   const countryCoordinates = {
-    "AU": [{ lat: -33.8688, lng: 151.2093 }, { lat: -37.8136, lng: 144.9631 }], 
-    "CH": [{ lat: 47.3769, lng: 8.5417 }, { lat: 46.2044, lng: 6.1432 }] // 新增瑞士坐标 (苏黎世, 日内瓦)
+    "AU": [{ lat: -37.8136, lng: 144.9631 }], // 只保留墨尔本
+    "CH": [{ lat: 47.3769, lng: 8.5417 }]      // 只保留苏黎世
   }
   const coordsArray = countryCoordinates[country]
   const randomCity = coordsArray[Math.floor(Math.random() * coordsArray.length)]
@@ -292,9 +287,8 @@ function formatAddress(address, country) {
   return `${address.house_number} ${address.road}, ${address.city || address.town || address.village}, ${address.postcode || ''}, ${country}`;
 }
 
-
 function getRandomPhoneNumber(country) {
-  // 只保留澳大利亚和新增的瑞士电话格式
+  // 只保留澳大利亚和瑞士的电话格式
   const phoneFormats = {
     "AU": () => {
       const areaCode = Math.floor(2 + Math.random() * 8).toString()
